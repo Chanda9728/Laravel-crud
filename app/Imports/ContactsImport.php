@@ -43,7 +43,6 @@ class ContactsImport implements ToModel, WithValidation
         $rules = [
             '0' => 'required', // image
             '1' => 'required|string|max:25', // name
-            // '1' => 'required|regex:/^\+\d{1,3}\s?[-]?\(?\d{3}\)?\s?\d{3}[-]?\d{4}$/', // phone
             '2' => 'required', // phone
             '3' => 'required|unique:contacts,email', // email
             '4' => 'required|string|max:255', // street_address

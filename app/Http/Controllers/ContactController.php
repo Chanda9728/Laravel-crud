@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContactRequest;
 use App\Imports\ContactsImport;
 use App\Models\Contact;
 use Illuminate\Http\Request;
@@ -23,20 +24,9 @@ class ContactController extends Controller
         return view('contacts.create');
     }
 
-    public function store(Request $request)
+    public function store(ContactRequest $request)
     {
         $data = $request->all();
-        $request->validate([
-            'name' => 'required|string|max:25',
-            'image'=>'required|mimes:jpeg,jpg',
-            'phone' => ['required', 'regex:/^\+\d{1,3}\s?[-]?\(?\d{3}\)?\s?\d{3}[-]?\d{4}$/'],
-            'email' => 'required|email|unique:contacts',
-            'street_address' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'state' => 'required|in:CA,NY,AT',
-            'country' => 'required|in:IN,US,EU',
-        ]);
-        // dd($request->all());
         if ($request->hasFile('image')) {
             $extension = $request->file('image')->getClientOriginalExtension();
             $filename = 'image_' . time() . '.' . $extension;
@@ -59,19 +49,9 @@ class ContactController extends Controller
         return view('contacts.edit', compact('contact'));
     }
 
-    public function update(Request $request, Contact $contact)
+    public function update(ContactRequest $request, Contact $contact)
     {
         $data = $request->all();
-        $request->validate([
-            'name' => 'required|string|max:25',
-            'image'=>'nullable|mimes:jpeg,jpg',
-            'phone' => ['required', 'regex:/^\+\d{1,3}\s?[-]?\(?\d{3}\)?\s?\d{3}[-]?\d{4}$/'],
-            'email' => 'required|email|unique:contacts,email,' . $contact->id,
-            'street_address' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-            'state' => 'required|in:CA,NY,AT',
-            'country' => 'required|in:IN,US,EU',
-        ]);
         if ($request->hasFile('image')) {
             $extension = $request->file('image')->getClientOriginalExtension();
             $filename = 'image_' . time() . '.' . $extension;
