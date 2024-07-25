@@ -1,0 +1,7 @@
+public
+vendor
+.env/.phpunit.cache
+/public/storage
+/storage/*.key
+/vendor
+.env
