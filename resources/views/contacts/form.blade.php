@@ -5,6 +5,7 @@
         'phone' => '',
         'email' => '',
         'street_address' => '',
+        'image' => '',
         'city' => '',
         'state' => 'CA', // Default state
         'country' => 'US', // Default country
@@ -35,6 +36,14 @@
     <input type="email" name="email" id="email" class="form-control"
         value="{{ old('email', $values['email']) }}" required>
     @error('email')
+        <div class="alert alert-danger mt-1">{{ $message }}</div>
+    @enderror
+</div>
+<div class="form-group">
+    <label for="image">Image:</label>
+    <input type="file" name="image" id="image" class="form-control"
+        value="{{ old('image', $values['image']) }}" >
+    @error('image')
         <div class="alert alert-danger mt-1">{{ $message }}</div>
     @enderror
 </div>

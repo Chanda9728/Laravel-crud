@@ -3,6 +3,15 @@
 @section('content')
     <div class="container">
         <h1>{{ $contact->name }}</h1>
+
+        @if ($contact->image)
+            <div class="image-container">
+                <img src="{{ asset($contact->image) }}" alt="{{ $contact->name }}" style="width: 50px; height: 50px;">
+            </div>
+        @else
+            <p>No Image Available</p>
+        @endif
+
         <p>Phone: {{ $contact->phone }}</p>
         <p>Email: {{ $contact->email }}</p>
         <p>Address: {{ $contact->street_address }}, {{ $contact->city }}, {{ $contact->state }}, {{ $contact->country }}</p>

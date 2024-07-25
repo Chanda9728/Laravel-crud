@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name', 25);
             $table->string('phone');
             $table->string('email',191)->unique();
+            $table->string('image');
             $table->string('street_address');
             $table->string('city');
             $table->string('state');

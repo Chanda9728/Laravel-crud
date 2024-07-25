@@ -26,27 +26,31 @@ class ContactsImport implements ToModel, WithValidation
 
 
         return new Contact([
-            'name' => $row[0],
-            'phone' => $row[1],
-            'email' => $row[2],
-            'street_address' => $row[3],
-            'city' => $row[4],
-            'state' => $row[5],
-            'country' => $row[6],
+            'image' => $row[0],
+            'name' => $row[1],
+            'phone' => $row[2],
+            'email' => $row[3],
+            'street_address' => $row[4],
+            'city' => $row[5],
+            'state' => $row[6],
+            'country' => $row[7],
+            
         ]);
     }
 
     public function rules(): array
     {
         $rules = [
-            '0' => 'required|string|max:25', // name
+            '0' => 'required', // image
+            '1' => 'required|string|max:25', // name
             // '1' => 'required|regex:/^\+\d{1,3}\s?[-]?\(?\d{3}\)?\s?\d{3}[-]?\d{4}$/', // phone
-            '1' => 'required', // phone
-            '2' => 'required|unique:contacts,email', // email
-            '3' => 'required|string|max:255', // street_address
-            '4' => 'required|string|max:255', // city
-            '5' => 'required', // state
-            '6' => 'required', // country
+            '2' => 'required', // phone
+            '3' => 'required|unique:contacts,email', // email
+            '4' => 'required|string|max:255', // street_address
+            '5' => 'required|string|max:255', // city
+            '6' => 'required', // state
+            '7' => 'required', // country
+            
         ];
 
         return $rules;

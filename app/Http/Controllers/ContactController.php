@@ -25,8 +25,10 @@ class ContactController extends Controller
 
     public function store(Request $request)
     {
+        $data = $request->all();
         $request->validate([
             'name' => 'required|string|max:25',
+            'image'=>'required|mimes:jpeg,jpg',
             'phone' => ['required', 'regex:/^\+\d{1,3}\s?[-]?\(?\d{3}\)?\s?\d{3}[-]?\d{4}$/'],
             'email' => 'required|email|unique:contacts',
             'street_address' => 'required|string|max:255',
@@ -34,8 +36,14 @@ class ContactController extends Controller
             'state' => 'required|in:CA,NY,AT',
             'country' => 'required|in:IN,US,EU',
         ]);
-
-        Contact::create($request->all());
+        // dd($request->all());
+        if ($request->hasFile('image')) {
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filename = 'image_' . time() . '.' . $extension;
+            $request->file('image')->move(public_path('admin/image'), $filename);
+            $data['image'] = 'admin/image/' . $filename;
+        }
+        Contact::create($data);
 
         return redirect()->route('contacts.index')
             ->with('success', 'Contact created successfully.');
@@ -53,8 +61,10 @@ class ContactController extends Controller
 
     public function update(Request $request, Contact $contact)
     {
+        $data = $request->all();
         $request->validate([
             'name' => 'required|string|max:25',
+            'image'=>'nullable|mimes:jpeg,jpg',
             'phone' => ['required', 'regex:/^\+\d{1,3}\s?[-]?\(?\d{3}\)?\s?\d{3}[-]?\d{4}$/'],
             'email' => 'required|email|unique:contacts,email,' . $contact->id,
             'street_address' => 'required|string|max:255',
@@ -62,8 +72,17 @@ class ContactController extends Controller
             'state' => 'required|in:CA,NY,AT',
             'country' => 'required|in:IN,US,EU',
         ]);
+        if ($request->hasFile('image')) {
+            $extension = $request->file('image')->getClientOriginalExtension();
+            $filename = 'image_' . time() . '.' . $extension;
+            $request->file('image')->move(public_path('admin/image'), $filename);
+            $data['image'] = 'admin/image/' . $filename;
+            if ($contact['image']) {
+                @unlink($contact['image']);
+            }
+        }
 
-        $contact->update($request->all());
+        $contact->update($data);
 
         return redirect()->route('contacts.index')
             ->with('success', 'Contact updated successfully.');
@@ -71,6 +90,9 @@ class ContactController extends Controller
 
     public function destroy(Contact $contact)
     {
+        if ($contact['image']) {
+            @unlink($contact['image']);
+        }
         $contact->delete();
 
         return redirect()->route('contacts.index')
